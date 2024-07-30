@@ -7,4 +7,7 @@ export default class usersDTO {
   @IsString()
   @IsNotEmpty()
   email: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }
