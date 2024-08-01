@@ -17,9 +17,10 @@ export async function Delete(service: any, id: number) {
     return await service.repository.delete(id);
 }
 
-export async function ResponseMessage(message: any) {
+export async function ResponseMessage(message: any, data?: any) {
     return {
-        message
+        message,
+        data
     }
 }
 
@@ -36,6 +37,11 @@ export class RepositoryService {
     async findOne(id: number) {
         return await RepositoryAction(this, "findOneBy", { id });
     }
+
+    async findOneBy(fields) {
+        return await RepositoryAction(this, "findOneBy", fields);
+    }
+
 
     async findSelect(fields: any) {
         return await RepositoryAction(this, "find", fields);
