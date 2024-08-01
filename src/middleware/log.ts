@@ -7,7 +7,7 @@ export class LoggerMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
         const { method, originalUrl } = req;
         const ip = req.ip || req.connection.remoteAddress;
-        console.log(`${green("[Nest]")} XXXXX  - ${getDate()}, ${getTime()}     ${green("LOG")} [DigitalPowerLog] ${yellow("[" + method + "]")} ${originalUrl} ${magenta("from")} ${ip}`);
+        console.log(`${green("[Nest]")} ${green(process.pid)}  ${green("-")} ${getDate()}, ${getTime()}     ${green("LOG")} ${yellow("[DigitalPowerLog]")} ${magenta("[" + method + "]")} ${originalUrl} ${magenta("from")} ${ip}`);
 
         next();
     }
