@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
+import { LoggerMiddleware } from './middleware/log';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { UsersModule } from './modules/users/users.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '1314',
+      password: '',
       database: 'dpnestjs',
     }),
     UsersModule,
@@ -22,4 +23,9 @@ import { UsersModule } from './modules/users/users.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+  }
+}
