@@ -1,8 +1,8 @@
 import { Body, HttpException, HttpStatus, Post, Req } from '@nestjs/common';
+import { Model } from './model.entity';
 import { RepositoryService } from '../repository/repository';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Model } from './model.entity';
 
 export class ModelController {
   public service: RepositoryService;
@@ -20,6 +20,7 @@ export class ModelController {
 
   @Post('/save')
   async create(@Body() dto: any) {
+
     const instance = plainToClass(this.modelDto, dto);
     const errors = await validate(instance);
     if (errors.length > 0) {

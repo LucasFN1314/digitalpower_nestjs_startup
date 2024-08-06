@@ -1,44 +1,38 @@
 import { Controller, Injectable, Module } from '@nestjs/common';
 import { Model } from '../model/model.entity';
-import { ModelController } from '../model/model.controller';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
-import { Column, Entity, PrimaryGeneratedColumn, Repository } from 'typeorm';
+import { ModelController } from '../model/model.controller';
+import { IsNotEmpty } from 'class-validator';
 import { RepositoryService } from '../repository/repository';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Repository } from 'typeorm';
 
-@Entity()
-export class Test extends Model {
-  constructor() {
-    super('Test');
-    this.generateDto({
-      name: [IsNotEmpty(), IsString()],
-    });
+const Test = new Model();
+Test.setupDto('Test', {
+  name: [IsNotEmpty()]
+})
+Test.setup('Test', {
+  name: {
+    type: 'varchar'
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-}
+});
 
 @Injectable()
-export class TestService extends RepositoryService {
-  constructor(@InjectRepository(Test) public repository: Repository<Test>) {
-    super();
+export class Service extends RepositoryService {
+  constructor (@InjectRepository(Test.schema) repository: Repository<typeof Test.schema>){
+    super(repository);
   }
 }
 
 @Controller('/test')
 export class TestController extends ModelController {
-  constructor(public readonly service: TestService) {
-    super(new Test());
+  constructor(public readonly service: Service) {
+    super(Test);
   }
 }
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Test])],
-  providers: [TestService],
+  imports: [TypeOrmModule.forFeature([Test.schema])],
+  providers: [Service],
   controllers: [TestController],
 })
 export class TestModule {}

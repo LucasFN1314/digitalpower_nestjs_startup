@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './middleware/log';
+import { TestModule } from './modules/test/test';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { LoggerMiddleware } from './middleware/log';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'dpnestjs',
+      database: 'test',
     }),
     UsersModule,
+    TestModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,16 +1,30 @@
 import Dto from './dto';
-import { Entity } from 'typeorm';
+import { EntitySchema } from 'typeorm';
 
-@Entity()
 export class Model {
   public dto: Dto;
-  public className: string;
+  public schema: EntitySchema;
+  public service: any;
 
-  constructor(className: string) {
-    this.className = className;
+  constructor() {
   }
 
-  generateDto(properties: { [key: string]: any[] }) {
-    this.dto = new Dto(this.className, properties);
+  setupDto (name, args) {
+    this.dto = new Dto(name, args);
+  }
+
+  setup (name: string, args?: any) {
+    this.schema = new EntitySchema({
+      name: name,
+      columns: {
+        id: {
+          type: 'int',
+          primary: true,
+          generated: true,
+        },
+        ...args,
+      },
+    });
+    //this.service = createService(this.schema);
   }
 }
