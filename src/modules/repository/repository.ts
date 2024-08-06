@@ -9,6 +9,10 @@ export async function RepositoryAction(
 }
 
 export async function SaveModel(service: any, dto: any) {
+  const entry = service.findAll({ where: { id: dto?.id } });
+  if (entry.length > 0) {
+    return await service.repository.save(dto);
+  }
   const temp = await service.repository.create(dto);
   return await service.repository.save(temp);
 }
