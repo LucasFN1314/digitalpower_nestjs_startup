@@ -3,7 +3,7 @@ import { Model } from '../model/model.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModelController } from '../model/model.controller';
 import { IsNotEmpty } from 'class-validator';
-import { generateService } from '../repository/repository';
+import { generateService, getService } from '../repository/repository';
 
 const Test = new Model();
 Test.setupDto('Test', {
@@ -25,10 +25,7 @@ export class TestController extends ModelController {
 @Module({
   imports: [TypeOrmModule.forFeature([Test.schema])],
   providers: [
-    {
-      provide: 'TestService',
-      useClass: generateService(Test)
-    }
+    getService('TestService', Test)
   ],
   controllers: [TestController],
 })

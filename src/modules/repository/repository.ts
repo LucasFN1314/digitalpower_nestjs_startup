@@ -47,3 +47,9 @@ export function generateService (model: Model) {
   }
   return Service;
 }
+export function getService (name: string, model: any) {
+  return {
+    provide: name,
+    useClass: generateService(model)
+  }
+}
