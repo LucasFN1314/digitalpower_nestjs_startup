@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Type } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { Model } from '../model/model.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export async function ResponseMessage(message: any, data?: any) {
   return {
@@ -34,4 +36,14 @@ export class RepositoryService {
     await this.repository.delete(id);
     return ResponseMessage('Elemento eliminado');
   }
+}
+
+export function generateService (model: Model) {
+  @Injectable()
+  class Service extends RepositoryService {
+    constructor (@InjectRepository(model.schema) repository: Repository<typeof model.schema>){
+      super(repository);
+    }
+  }
+  return Service;
 }

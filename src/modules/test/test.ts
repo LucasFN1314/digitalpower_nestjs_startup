@@ -1,10 +1,9 @@
-import { Controller, Injectable, Module } from '@nestjs/common';
+import { Controller, Inject, Module } from '@nestjs/common';
 import { Model } from '../model/model.entity';
-import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModelController } from '../model/model.controller';
 import { IsNotEmpty } from 'class-validator';
-import { RepositoryService } from '../repository/repository';
-import { Repository } from 'typeorm';
+import { generateService } from '../repository/repository';
 
 const Test = new Model();
 Test.setupDto('Test', {
@@ -16,23 +15,22 @@ Test.setup('Test', {
   }
 });
 
-@Injectable()
-export class Service extends RepositoryService {
-  constructor (@InjectRepository(Test.schema) repository: Repository<typeof Test.schema>){
-    super(repository);
-  }
-}
-
 @Controller('/test')
 export class TestController extends ModelController {
-  constructor(public readonly service: Service) {
+  constructor(@Inject('TestService') public readonly service) {
     super(Test);
   }
 }
 
 @Module({
   imports: [TypeOrmModule.forFeature([Test.schema])],
-  providers: [Service],
+  providers: [
+    {
+      provide: 'TestService',
+      useClass: generateService(Test)
+    }
+  ],
   controllers: [TestController],
 })
 export class TestModule {}
+
