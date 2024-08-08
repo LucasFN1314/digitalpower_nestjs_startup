@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable, Type } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Model } from '../model/model.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 export async function ResponseMessage(message: any, data?: any) {
   return {
@@ -38,18 +39,20 @@ export class RepositoryService {
   }
 }
 
-export function generateService (model: Model) {
+export function generateService(model: Model) {
   @Injectable()
   class Service extends RepositoryService {
-    constructor (@InjectRepository(model.schema) repository: Repository<typeof model.schema>){
+    constructor(@InjectRepository(model.schema) repository: Repository<typeof model.schema>, configService: ConfigService) {
       super(repository);
     }
   }
+
   return Service;
 }
-export function getService (name: string, model: any) {
+
+export function getService(name: string, model: any) {
   return {
     provide: name,
-    useClass: generateService(model)
-  }
+    useClass: generateService(model),
+  };
 }
