@@ -20,21 +20,26 @@ export class ModelController {
 
   @Post('/save')
   async create(@Body() dto: any) {
+    const validated: any = await this.validation(this.modelDto, dto);
+    if (validated?.errors) throw new HttpException({ message: validated?.errors }, HttpStatus.BAD_REQUEST);
+    return await this.service.create(validated);
+  }
 
-    const instance = plainToClass(this.modelDto, dto);
+  @Post('/delete')
+  async delete(@Req() req: any) {
+    return await this.service.remove(req.body.id);
+  }
+
+  private async validation(model: any, dto: any) {
+    const instance = plainToClass(model, dto);
     const errors = await validate(instance);
     if (errors.length > 0) {
       const err = [];
       Object.keys(errors[0].constraints).forEach((key) => {
         err.push(errors[0].constraints[key]);
       });
-      throw new HttpException({ message: err }, HttpStatus.BAD_REQUEST);
+      return { errors: err };
     }
-    return await this.service.create(instance);
-  }
-
-  @Post('/delete')
-  async delete(@Req() req: any) {
-    return await this.service.remove(req.body.id);
+    return instance;
   }
 }

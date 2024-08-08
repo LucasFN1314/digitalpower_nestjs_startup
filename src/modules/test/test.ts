@@ -3,7 +3,7 @@ import { Model } from '../model/model.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModelController } from '../model/model.controller';
 import { IsNotEmpty } from 'class-validator';
-import { generateService, getService } from '../repository/repository';
+import { getService } from '../repository/repository';
 
 const Test = new Model();
 Test.setupDto('Test', {
