@@ -30,7 +30,7 @@ export class ModelController {
     return await this.service.remove(req.body.id);
   }
 
-  private async validation(model: any, dto: any) {
+  async validation(model: any, dto: any) {
     const instance = plainToClass(model, dto);
     const errors = await validate(instance);
     if (errors.length > 0) {
@@ -41,5 +41,10 @@ export class ModelController {
       return { errors: err };
     }
     return instance;
+  }
+
+  async uniqueFieldValidation(arg) {
+    let result = await this.service.findAll({ where: arg });
+    return result.length === 0;
   }
 }
