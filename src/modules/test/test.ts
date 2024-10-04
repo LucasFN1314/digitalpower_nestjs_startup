@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModelController } from '../model/model.controller';
 import { IsNotEmpty } from 'class-validator';
 import { getService } from '../repository/repository';
+import { ConfigModule } from '@nestjs/config';
 
 const Test = new Model();
 Test.setupDto('Test', {
@@ -23,7 +24,7 @@ export class TestController extends ModelController {
 }
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Test.schema])],
+  imports: [TypeOrmModule.forFeature([Test.schema]), ConfigModule.forRoot()],
   providers: [
     getService('TestService', Test)
   ],
