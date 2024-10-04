@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './middleware/log';
-import { FileModule } from './modules/test/test';
+import { TestModule } from './modules/test/test';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -17,7 +17,8 @@ import { ConfigModule } from '@nestjs/config';
       type: 'sqlite',
       database: './database.db',
     }),
-    FileModule
+    //UsersModule,
+    TestModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -22,10 +22,8 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      console.log(token);
       req.user = await jwt.verify(token, secret);
     } catch (error) {
-      console.log(error);
       throw new HttpException('Token invalido', HttpStatus.UNAUTHORIZED);
     }
     next();
