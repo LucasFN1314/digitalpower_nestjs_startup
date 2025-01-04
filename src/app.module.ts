@@ -2,10 +2,9 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './modules/users/users.module';
 import { LoggerMiddleware } from './middleware/log';
-import { TestModule } from './modules/test/test';
 import { ConfigModule } from '@nestjs/config';
+import { MainModule } from './modules/main/main_module';
 
 @Module({
   imports: [
@@ -17,15 +16,15 @@ import { ConfigModule } from '@nestjs/config';
       type: 'sqlite',
       database: './database.db',
     }),
-    //UsersModule,
-    TestModule
+    MainModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL })
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
