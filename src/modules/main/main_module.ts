@@ -7,6 +7,9 @@ import { getService } from '../repository/repository';
 import { ConfigModule } from '@nestjs/config';
 
 const model = new Model();
+model.SmartSetup('model', ['name'])
+/* Manual Way */
+/*
 model.setupDto('Model', {
   name: [IsNotEmpty()],
 });
@@ -15,6 +18,7 @@ model.setup('Model', {
     type: 'varchar',
   },
 });
+*/
 
 @Controller('/model')
 export class modelController extends ModelController {
