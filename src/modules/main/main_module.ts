@@ -1,10 +1,9 @@
-import { Controller, Inject, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { Model } from '../model/model.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ModelController } from '../model/model.controller';
-import { IsNotEmpty } from 'class-validator';
 import { getService } from '../repository/repository';
-import { ConfigModule } from '@nestjs/config';
+import { Controller, Inject, Module } from '@nestjs/common';
+import { ModelController } from '../model/model.controller';
 
 const model = new Model();
 model.SmartSetup('model', ['name'])
