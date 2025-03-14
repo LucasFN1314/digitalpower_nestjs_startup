@@ -19,7 +19,7 @@ model.setup('Model', {
 });
 */
 
-@Controller('/model')
+@Controller('/api')
 export class modelController extends ModelController {
   constructor(@Inject('ModelService') public readonly service) {
     super(model);
@@ -31,4 +31,4 @@ export class modelController extends ModelController {
   providers: [getService('ModelService', model)],
   controllers: [modelController],
 })
-export class MainModule {}
+export class MainModule { }
