@@ -19,14 +19,18 @@ export class RepositoryService {
   }
 
   async create(dto: any) {
-    if (dto?.id) {
+    if (dto?.id !== "null" && dto?.id !== null) {
       const entry = await this.repository.findOne({ where: { id: dto.id } });
       if (entry) {
         await this.repository.update(dto.id, dto); // <- update explícito
         return await this.repository.findOne({ where: { id: dto.id } });
       }
     }
-    return await this.repository.save(dto);
+
+    delete dto.id;
+
+    const temp = await this.repository.create(dto);
+    return await this.repository.save(temp);
   }
 
   async findAll(arg?: any) {
