@@ -19,12 +19,14 @@ export class RepositoryService {
   }
 
   async create(dto: any) {
-    const entry = await this.repository.find({ where: { id: dto?.id } });
-    if (entry.length > 0) {
-      return await this.repository.save(dto);
+    if (dto?.id) {
+      const entry = await this.repository.findOne({ where: { id: dto.id } });
+      if (entry) {
+        await this.repository.update(dto.id, dto); // <- update explícito
+        return await this.repository.findOne({ where: { id: dto.id } });
+      }
     }
-    const temp = await this.repository.create(dto);
-    return await this.repository.save(temp);
+    return await this.repository.save(dto);
   }
 
   async findAll(arg?: any) {
